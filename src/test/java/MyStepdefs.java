@@ -9,18 +9,31 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.junit.Assert.assertNotSame;
 
 public class MyStepdefs extends BasePage {
+    @cucumber.api.java.Before
+    public void intialsteps(){
+        System.setProperty("webdriver.chrome.driver", "src/test/chromedriver.exe");
+
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+
+
+    }
+    @cucumber.api.java.After
+    public void closingsteps()
+    {
+        driver.quit();
+    }
     private WebElement element;
     private By frameLocator = By.className("search-nav expanded-search apply-nav-height");
     private By tagText = By.id("gnav-search");
 
     @Given("^open url \"([^\"]*)\"$")
     public void openUrl(String arg0) throws Throwable {
-        System.setProperty("webdriver.chrome.driver", "src/test/chromedriver.exe");
 
-         driver = new ChromeDriver();
-        driver.manage().window().maximize();
+
         driver.get(arg0);
         driver.manage().timeouts().implicitlyWait(10, SECONDS);
         driver.findElement(By.xpath("/html/body/div[2]/div[1]/div[2]/div/div/div[2]/button")).click();
@@ -32,9 +45,10 @@ public class MyStepdefs extends BasePage {
     public void enterInSearchBar(String arg0) throws Throwable {
        driver.findElement(By.id("search-query")).clear();
         driver.findElement(By.id("search-query")).sendKeys(arg0);
-       // driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
-        driver.manage().timeouts().pageLoadTimeout(10, SECONDS);
+
+       // driver.manage().timeouts().pageLoadTimeout(20, SECONDS);
+        Thread.sleep(3000);
 
         List<WebElement> list=driver.findElements(By.xpath("//div[@id='search-suggestions']//ul//li/descendant::div[span[@class='normal']]"));
 
@@ -50,7 +64,9 @@ public class MyStepdefs extends BasePage {
         }
 
         }
-
+        String s= driver.findElement(By.xpath("//*[@id='content']/descendant::div//span[@class=' text-smaller']")).getText();
+        System.out.println(s);
+        assertNotSame("(0 Results)", s);
         }
 
     @When("^search is sorted by price Highest$")
