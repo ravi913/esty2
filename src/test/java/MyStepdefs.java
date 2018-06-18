@@ -35,7 +35,7 @@ public class MyStepdefs extends BasePage {
        // driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
         driver.manage().timeouts().pageLoadTimeout(10, SECONDS);
-        //Thread.sleep(2000);
+
         List<WebElement> list=driver.findElements(By.xpath("//div[@id='search-suggestions']//ul//li/descendant::div[span[@class='normal']]"));
 
         System.out.println("total number of list"+list.size());
